@@ -78,9 +78,10 @@ function App() {
           ) : <Navigate to="/login" />
       }>
           <Route path="/" element={<Trangchu files={files} />} />
-          <Route path="/folder/:id" element={<FolderPage />} />
-          <Route path="/workspaces/:id" element={<Workspace />} />
-          <Route path="/workspaces" element={<Workspace />} />
+<Route path="/user" element={<Trangchu files={files} />} />
+<Route path="/folder/:id" element={<FolderPage />} />
+<Route path="/workspaces/:id" element={<Workspace />} />
+<Route path="/workspaces" element={<Workspace />} />
       </Route>
     </Routes>
   );

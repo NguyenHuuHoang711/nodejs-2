@@ -53,15 +53,16 @@ const LoginPage = ({ setUser }) => {
             
             // 4. Kiểm tra Role và điều hướng sau 1.5s
             setTimeout(() => {
-                // Lấy role từ biến res trả về
-                if (res.role === 'admin') {
-                    console.log("Redirecting to Admin Dashboard");
-                    navigate('/admin');
-                } else {
-                    console.log("Redirecting to User Workspace");
-                    navigate('/');
-                }
-            }, 1000);
+    // Admin → Admin Dashboard
+    if (res.role === 'admin') {
+        console.log("Redirecting to Admin Dashboard");
+        navigate('/admin');
+    } else {
+        // User → User Homepage
+        console.log("Redirecting to User Homepage");
+        navigate('/user');
+    }
+}, 1000);
 
         } catch (err) {
             console.error("Login Error:", err);
