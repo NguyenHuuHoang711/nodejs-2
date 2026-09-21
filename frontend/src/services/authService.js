@@ -1,71 +1,106 @@
-import axiosClient, { setAccessToken, handleLogout } from '../utils/axiosClient';
-import {jwtDecode} from "jwt-decode";
-const API_URL = '/auth';
+import { handleLogout } from '../utils/axiosClient';
 
-// Lưu trữ user info tạm thời (Khác với accessToken - không lưu sensitive data vào localStorage)
+// =====================================================
+// FRONTEND PREVIEW ONLY
+// Không gọi Backend/API thật.
+// =====================================================
+
 let currentUser = null;
 
-const register = async (email, password) => {
+// Lấy user đã lưu trong session
+const loadUser = () => {
     try {
-        const response = await axiosClient.post(`${API_URL}/register`, {
-            email,
-            password,
-        });
-        
-        if (response.data.success && response.data.data?.accessToken) {
-            // Lớp 1: Lưu token vào RAM (Hẹn giờ refresh tự động)
-            setAccessToken(response.data.data.accessToken);
-            
-            // Lưu user info (có thể lưu vào sessionStorage nếu cần, tránh XSS)
-            currentUser = {
-                _id: response.data.data.user._id,
-                email: response.data.data.user.email
-            };
+        const savedUser = sessionStorage.getItem('preview_user');
+
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
         }
-        return response.data;
     } catch (error) {
-        throw error.response?.data || { success: false, message: 'Registration failed' };
+        console.error('[authService] Cannot load preview user:', error);
+        currentUser = null;
     }
+};
+
+// Khởi tạo user khi app load
+loadUser();
+
+const register = async (email, password) => {
+    // Preview only
+    const mockUser = {
+        _id: `preview-${Date.now()}`,
+        email,
+        role: 'user',
+    };
+
+    currentUser = mockUser;
+
+    sessionStorage.setItem(
+        'preview_user',
+        JSON.stringify(mockUser)
+    );
+
+    return {
+        success: true,
+        data: {
+            user: mockUser,
+        },
+    };
 };
 
 const login = async (email, password) => {
-    try {
-        const response = await axiosClient.post(`${API_URL}/login`, {
-            email,
-            password,
-        });
-        
-        console.log('[authService] Login response:', response.data);
-        
-        if (response.data.success && response.data.data?.accessToken) {
-            const token = response.data.data.accessToken;
-            // Lớp 1: Lưu token vào RAM (Hẹn giờ refresh tự động)
-            setAccessToken(response.data.data.accessToken);
-            
-            // Lưu user info (có thể lưu vào sessionStorage nếu cần)
-            currentUser = {
-                _id: response.data.data._id,
-                email: response.data.data.email
-            };
-        }
-        return {
-            success: true,
-            role: currentUser?.role, // Trả role ra ngoài
-            user: currentUser
-        };
-    } catch (error) {
-        console.error('[authService] Login error:', error);
-        throw error.response?.data || { success: false, message: 'Login failed' };
-    }
+    // =================================================
+    // MOCK LOGIN
+    //
+    // admin@test.com  -> admin
+    // user@test.com   -> user
+    // email khác      -> user
+    //
+    // Password chỉ phục vụ validation phía frontend.
+    // Không gửi password tới backend.
+    // =================================================
+
+    const role = email.toLowerCase().includes('admin')
+        ? 'admin'
+        : 'user';
+
+    const mockUser = {
+        _id: role === 'admin'
+            ? 'preview-admin'
+            : 'preview-user',
+
+        email,
+
+        role,
+    };
+
+    currentUser = mockUser;
+
+    sessionStorage.setItem(
+        'preview_user',
+        JSON.stringify(mockUser)
+    );
+
+    console.log('[authService] Preview login:', mockUser);
+
+    return {
+        success: true,
+        role: mockUser.role,
+        user: mockUser,
+    };
 };
 
 const logout = () => {
-    // Xóa token từ RAM và clear timer
     currentUser = null;
-    handleLogout(); // Xóa token và redirect /login
+
+    sessionStorage.removeItem('preview_user');
+
+    // Giữ hành vi logout hiện tại
+    handleLogout();
 };
 
-const getCurrentUser = () => currentUser;
+const getCurrentUser = () => {
+    return currentUser;
+};
 
 const authService = {
     register,

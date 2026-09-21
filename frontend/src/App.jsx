@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, Navigate, Outlet } from "react-router-dom"; 
-import axios from "axios";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -27,21 +27,23 @@ import authService from './services/authService';
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Mock data để preview frontend
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
+    // Lấy user từ mock authService
     const currentUser = authService.getCurrentUser();
+
     if (currentUser) {
       setUser(currentUser);
     }
-    setLoading(false);
 
-    if (currentUser) {
-        axios
-        .get("/api/v1/files") 
-        .then((res) => setFiles(res.data))
-        .catch((err) => console.error(err));
-    }
+    // Không gọi Backend API
+    // Frontend preview chỉ dùng mock data
+    setFiles([]);
+
+    setLoading(false);
   }, []);
 
   if (loading) {
@@ -54,35 +56,130 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/login" element={!user ? <LoginPage setUser={setUser} /> : <Navigate to="/" />} />
-      <Route path="/register" element={!user ? <RegisterPage setUser={setUser} /> : <Navigate to="/" />} />
-      <Route path="/share/:token" element={<SharePage />} />
 
-      <Route path="/admin" element={user?.role === 'admin' ? <AdminLayout /> : <Navigate to="/" />}>
-          <Route index element={<AdminDashboard />} /> 
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="users" element={<UserManagement />} />
-          <Route path="files" element={<FileManagement />} />
+      {/* =========================
+          LOGIN
+      ========================== */}
+      <Route
+        path="/login"
+        element={
+          !user
+            ? <LoginPage setUser={setUser} />
+            : <Navigate to="/user" replace />
+        }
+      />
+
+      {/* =========================
+          REGISTER
+      ========================== */}
+      <Route
+        path="/register"
+        element={
+          !user
+            ? <RegisterPage setUser={setUser} />
+            : <Navigate to="/user" replace />
+        }
+      />
+
+      {/* =========================
+          SHARE
+      ========================== */}
+      <Route
+        path="/share/:token"
+        element={<SharePage />}
+      />
+
+      {/* =========================
+          ADMIN
+      ========================== */}
+      <Route
+        path="/admin"
+        element={
+          user?.role === 'admin'
+            ? <AdminLayout />
+            : <Navigate to="/user" replace />
+        }
+      >
+        <Route
+          index
+          element={<AdminDashboard />}
+        />
+
+        <Route
+          path="dashboard"
+          element={<AdminDashboard />}
+        />
+
+        <Route
+          path="users"
+          element={<UserManagement />}
+        />
+
+        <Route
+          path="files"
+          element={<FileManagement />}
+        />
       </Route>
 
-      <Route element={
+      {/* =========================
+          USER
+      ========================== */}
+      <Route
+        element={
           user ? (
-              <>
-                  <Header />
-                  <div className="flex-grow-1 p-4" style={{ marginLeft: "250px", backgroundColor: "#FFFFFF", minHeight: "100vh" }}>
-                      <div className="container">
-                          <Outlet /> 
-                      </div>
-                  </div>
-              </>
-          ) : <Navigate to="/login" />
-      }>
-          <Route path="/" element={<Trangchu files={files} />} />
-<Route path="/user" element={<Trangchu files={files} />} />
-<Route path="/folder/:id" element={<FolderPage />} />
-<Route path="/workspaces/:id" element={<Workspace />} />
-<Route path="/workspaces" element={<Workspace />} />
+            <>
+              <Header />
+
+              <div
+                className="flex-grow-1 p-4"
+                style={{
+                  marginLeft: "250px",
+                  backgroundColor: "#FFFFFF",
+                  minHeight: "100vh"
+                }}
+              >
+                <div className="container">
+                  <Outlet />
+                </div>
+              </div>
+            </>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      >
+
+        {/* Homepage */}
+        <Route
+          path="/"
+          element={<Trangchu files={files} />}
+        />
+
+        {/* User page - dùng chính Trangchu */}
+        <Route
+          path="/user"
+          element={<Trangchu files={files} />}
+        />
+
+        {/* Folder */}
+        <Route
+          path="/folder/:id"
+          element={<FolderPage />}
+        />
+
+        {/* Workspace */}
+        <Route
+          path="/workspaces/:id"
+          element={<Workspace />}
+        />
+
+        <Route
+          path="/workspaces"
+          element={<Workspace />}
+        />
+
       </Route>
+
     </Routes>
   );
 }

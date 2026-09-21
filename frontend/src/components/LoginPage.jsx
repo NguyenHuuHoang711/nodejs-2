@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import authService from '../services/authService';
+// import authService from '../services/authService';
 import {
     Input,
     Button,
@@ -27,50 +27,54 @@ const LoginPage = ({ setUser }) => {
     };
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-        setError('');
-        setSuccess('');
+    e.preventDefault();
+    setError('');
+    setSuccess('');
 
-        if (!isFormValid(email, password)) {
-            setTouched({ email: true, password: true });
-            return;
-        }
-
-        setLoading(true);
-        try {
-            // 1. Gọi API đăng nhập
-            const res = await authService.login(email, password);
-            console.log("Login Response:", res);
-            setSuccess('Login successful! Redirecting...');
-            
-            // 2. Lấy thông tin User từ token (đã decode trong authService)
-            const currentUser = authService.getCurrentUser();
-            console.log("Current User after login:", currentUser);
-            // 3. Cập nhật State toàn cục
-            if (currentUser) {
-                setUser(currentUser);
-            }
-            
-            // 4. Kiểm tra Role và điều hướng sau 1.5s
-            setTimeout(() => {
-    // Admin → Admin Dashboard
-    if (res.role === 'admin') {
-        console.log("Redirecting to Admin Dashboard");
-        navigate('/admin');
-    } else {
-        // User → User Homepage
-        console.log("Redirecting to User Homepage");
-        navigate('/user');
+    if (!isFormValid(email, password)) {
+        setTouched({ email: true, password: true });
+        return;
     }
-}, 1000);
 
-        } catch (err) {
-            console.error("Login Error:", err);
-            setError(err.message || 'Failed to login. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    setLoading(true);
+
+    try {
+        // MOCK LOGIN - chỉ dùng để preview frontend
+        const role = email.toLowerCase().includes('admin')
+            ? 'admin'
+            : 'user';
+
+        const mockUser = {
+            _id: role === 'admin' ? 'admin-preview' : 'user-preview',
+            email,
+            role,
+        };
+
+        // Lưu user để App.jsx nhận diện trạng thái đăng nhập
+        localStorage.setItem(
+            'user',
+            JSON.stringify(mockUser)
+        );
+
+        setUser(mockUser);
+
+        setSuccess('Login successful! Redirecting...');
+
+        setTimeout(() => {
+            if (role === 'admin') {
+                navigate('/admin');
+            } else {
+                navigate('/user');
+            }
+        }, 500);
+
+    } catch (err) {
+        console.error("Preview Login Error:", err);
+        setError('Unable to login.');
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <AuthContainer title="Welcome Back" subtitle="Sign in to your account">
