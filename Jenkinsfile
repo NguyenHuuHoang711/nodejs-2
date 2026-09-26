@@ -17,7 +17,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('frontend') {
-                    bat 'npm install'
+                    sh 'npm install'
                 }
             }
         }
@@ -25,22 +25,22 @@ pipeline {
         stage('Build React') {
             steps {
                 dir('frontend') {
-                    bat 'npm run build'
+                    sh 'npm run build'
                 }
             }
         }
 
         stage('Docker Build') {
             steps {
-                bat 'docker build -t %IMAGE_NAME% ./frontend'
+                sh 'docker build -t $IMAGE_NAME ./frontend'
             }
         }
 
         stage('Docker Run') {
             steps {
-                bat '''
-                    docker rm -f %CONTAINER_NAME% 2>nul || exit 0
-                    docker run -d -p 8081:80 --name %CONTAINER_NAME% %IMAGE_NAME%
+                sh '''
+                    docker rm -f $CONTAINER_NAME 2>/dev/null || true
+                    docker run -d -p 8081:80 --name $CONTAINER_NAME $IMAGE_NAME
                 '''
             }
         }
