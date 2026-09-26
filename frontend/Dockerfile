@@ -1,19 +1,21 @@
-FROM node:20-alpine AS builder
+# Build React/Vite
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm install
 
 COPY . .
 
 RUN npm run build
 
 
+# Chạy bằng Nginx
 FROM nginx:alpine
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 

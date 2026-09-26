@@ -59,7 +59,7 @@ export default function Header({ onLogout = () => {} }) {
         </li>
         <li>
           <a href="#" className="nav-link link-dark">
-            <i className="bi bi-trash3 me-2"></i> Soopi
+            <i className="bi bi-trash3 me-2"></i> Soopidog
           </a>
         </li>
       </ul>
