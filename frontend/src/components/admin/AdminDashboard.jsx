@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { HardDrive, Users, FileText } from "lucide-react";
 
 const formatBytes = (bytes) => {
@@ -24,31 +24,69 @@ const AdminDashboard = () => {
         fetchDashboardData();
     }, []);
 
-    const fetchDashboardData = async () => {
-        try {
-            // 2. SỬA URL Ở ĐÂY: Thêm "-users" vào cuối để khớp với Backend
-            const [overviewRes, topRes] = await Promise.all([
-                axios.get("/api/v1/admin/system/overview"),
-                axios.get("/api/v1/admin/system/top-storage-users") 
-            ]);
+    // const fetchDashboardData = async () => {
+    //     try {
+    //         // 2. SỬA URL Ở ĐÂY: Thêm "-users" vào cuối để khớp với Backend
+    //         const [overviewRes, topRes] = await Promise.all([
+    //             axios.get("/api/v1/admin/system/overview"),
+    //             axios.get("/api/v1/admin/system/top-storage-users") 
+    //         ]);
 
-            // Cập nhật state nếu dữ liệu trả về đúng cấu trúc
-            if (overviewRes.data && overviewRes.data.data) {
-                setStats(overviewRes.data.data);
-            }
+    //         // Cập nhật state nếu dữ liệu trả về đúng cấu trúc
+    //         if (overviewRes.data && overviewRes.data.data) {
+    //             setStats(overviewRes.data.data);
+    //         }
             
-            if (topRes.data && topRes.data.data) {
-                setTopUsers(topRes.data.data);
-            }
+    //         if (topRes.data && topRes.data.data) {
+    //             setTopUsers(topRes.data.data);
+    //         }
 
-        } catch (error) {
-            console.error("Lỗi tải dashboard:", error);
-            // Không setStats ở đây để giữ nguyên giá trị mặc định (0), tránh crash
-        } finally {
-            setLoading(false);
-        }
+    //     } catch (error) {
+    //         console.error("Lỗi tải dashboard:", error);
+    //         // Không setStats ở đây để giữ nguyên giá trị mặc định (0), tránh crash
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    const fetchDashboardData = () => {
+    const mockStats = {
+        totalUsers: 128,
+        totalFiles: 1542,
+        totalStorageUsed: 5368709120
     };
 
+    const mockTopUsers = [
+        {
+            userId: "user001",
+            email: "admin@example.com",
+            role: "admin",
+            usedStorage: 2147483648
+        },
+        {
+            userId: "user002",
+            email: "hiep@example.com",
+            role: "user",
+            usedStorage: 1073741824
+        },
+        {
+            userId: "user003",
+            email: "student@example.com",
+            role: "user",
+            usedStorage: 524288000
+        },
+        {
+            userId: "user004",
+            email: "demo@example.com",
+            role: "user",
+            usedStorage: 104857600
+        }
+    ];
+
+    setStats(mockStats);
+    setTopUsers(mockTopUsers);
+    setLoading(false);
+};
     if (loading) {
         return <div className="p-6">Đang tải dữ liệu...</div>;
     }
