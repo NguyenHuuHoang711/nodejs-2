@@ -314,21 +314,77 @@ const FileList = () => {
         fetchFiles();
     }, []);
 
-    const fetchFiles = async () => {
-        try {
-            const response = await axios.get(API_URL);
-            // GIẢ ĐỊNH: Thêm item folder để minh họa phân loại
-            const sampleData = [
-                // { _id: 'f101', name: 'Photos', uploadDate: new Date(), isFolder: true, owner: 'N' },
-                // { _id: 'f102', name: 'Báo cáo 2024', uploadDate: new Date(Date.now() - 86400000), isFolder: true, owner: 'N' },
-                ...response.data, // Dữ liệu từ API
-            ].sort((a, b) => (b.isFolder ? 1 : 0) - (a.isFolder ? 1 : 0)); // Đưa folder lên đầu
+    // const fetchFiles = async () => {
+    //     try {
+    //         const response = await axios.get(API_URL);
+    //         // GIẢ ĐỊNH: Thêm item folder để minh họa phân loại
+    //         const sampleData = [
+    //             // { _id: 'f101', name: 'Photos', uploadDate: new Date(), isFolder: true, owner: 'N' },
+    //             // { _id: 'f102', name: 'Báo cáo 2024', uploadDate: new Date(Date.now() - 86400000), isFolder: true, owner: 'N' },
+    //             ...response.data, // Dữ liệu từ API
+    //         ].sort((a, b) => (b.isFolder ? 1 : 0) - (a.isFolder ? 1 : 0)); // Đưa folder lên đầu
             
-            setFiles(sampleData);
-        } catch (error) {
-            console.error("Lỗi khi lấy danh sách:", error);
+    //         setFiles(sampleData);
+    //     } catch (error) {
+    //         console.error("Lỗi khi lấy danh sách:", error);
+    //     }
+    // };
+
+    const fetchFiles = async () => {
+    const mockData = [
+        {
+            _id: 'product-001',
+            name: 'Laptop Acer Nitro 5.pdf',
+            uploadDate: '2026-09-20',
+            isFolder: false,
+            owner: 'N'
+        },
+        {
+            _id: 'product-002',
+            name: 'React Project.docx',
+            uploadDate: '2026-09-21',
+            isFolder: false,
+            owner: 'N'
+        },
+        {
+            _id: 'product-003',
+            name: 'ASP.NET Core.xlsx',
+            uploadDate: '2026-09-22',
+            isFolder: false,
+            owner: 'N'
+        },
+        {
+            _id: 'product-004',
+            name: 'Cloud Storage.png',
+            uploadDate: '2026-09-23',
+            isFolder: false,
+            owner: 'N'
+        },
+        {
+            _id: 'product-005',
+            name: 'Source Code.zip',
+            uploadDate: '2026-09-24',
+            isFolder: false,
+            owner: 'N'
+        },
+        {
+            _id: 'folder-001',
+            name: 'Đồ án Web',
+            uploadDate: '2026-09-20',
+            isFolder: true,
+            owner: 'N'
+        },
+        {
+            _id: 'folder-002',
+            name: 'Tài liệu học tập',
+            uploadDate: '2026-09-21',
+            isFolder: true,
+            owner: 'N'
         }
-    };
+    ];
+
+    setFiles(mockData);
+};
     
     // --- HÀM XỬ LÝ HÀNH ĐỘNG TỪ SUB-COMPONENTS ---
     const handleItemAction = async (action, id, newName) => {
