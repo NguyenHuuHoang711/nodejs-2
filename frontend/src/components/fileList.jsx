@@ -331,59 +331,21 @@ const FileList = () => {
     // };
 
     const fetchFiles = async () => {
-    const mockData = [
-        {
-            _id: 'product-001',
-            name: 'Laptop Acer Nitro 5.pdf',
-            uploadDate: '2026-09-20',
-            isFolder: false,
-            owner: 'N'
-        },
-        {
-            _id: 'product-002',
-            name: 'React Project.docx',
-            uploadDate: '2026-09-21',
-            isFolder: false,
-            owner: 'N'
-        },
-        {
-            _id: 'product-003',
-            name: 'ASP.NET Core.xlsx',
-            uploadDate: '2026-09-22',
-            isFolder: false,
-            owner: 'N'
-        },
-        {
-            _id: 'product-004',
-            name: 'Cloud Storage.png',
-            uploadDate: '2026-09-23',
-            isFolder: false,
-            owner: 'N'
-        },
-        {
-            _id: 'product-005',
-            name: 'Source Code.zip',
-            uploadDate: '2026-09-24',
-            isFolder: false,
-            owner: 'N'
-        },
-        {
-            _id: 'folder-001',
-            name: 'Đồ án Web',
-            uploadDate: '2026-09-20',
-            isFolder: true,
-            owner: 'N'
-        },
-        {
-            _id: 'folder-002',
-            name: 'Tài liệu học tập',
-            uploadDate: '2026-09-21',
-            isFolder: true,
-            owner: 'N'
-        }
-    ];
+  console.log("🔥🔥🔥 FILELIST MOCK TEST 🔥🔥🔥");
 
-    setFiles(mockData);
+  const mockData = [
+    {
+      _id: "product-001",
+      name: "TEST RENDER PRODUCT",
+      createdAt: "2026-09-20",
+      isFolder: false,
+      owner: { name: "Render Test" }
+    }
+  ];
+
+  console.log("🔥 MOCK DATA:", mockData);
+
+  setFiles(mockData);
 };
     
     // --- HÀM XỬ LÝ HÀNH ĐỘNG TỪ SUB-COMPONENTS ---

@@ -2,14 +2,15 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "bootstrap"; // Import Modal từ bootstrap
 
-import { folderApi } from "../services/folderApi";
-import { fileApi } from "../services/fileApi";
-import { recentApi } from "../services/recentApi";
+// import { folderApi } from "../services/folderApi";
+// import { fileApi } from "../services/fileApi";
+// import { recentApi } from "../services/recentApi";
 import FolderItem from "../components/folderItem";
 import FileItem from "../components/fileItem";
 import RecentFile from "../components/recentFileItem";
 
 export default function Trangchu() {
+  console.log("🚨🚨🚨 TRANGCHU ĐANG CHẠY 🚨🚨🚨");
   // --- STATE ---
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
@@ -34,41 +35,89 @@ export default function Trangchu() {
   // =========================================================
   // 1. LOAD DỮ LIỆU (Đã fix lỗi hiển thị file của người khác)
   // =========================================================
+  // useEffect(() => {
+  //   async function loadData() {
+  //     try {
+  //       if (!currentUserId) {
+  //           // Nếu chưa đăng nhập (hoặc mất ID), không tải dữ liệu để bảo mật
+  //           setLoading(false);
+  //           return;
+  //       }
+
+  //       const [folderRes, fileRes, recentRes] = await Promise.all([
+  //         folderApi.getAll(),
+  //         // QUAN TRỌNG: Truyền userId vào để chỉ lấy file của mình
+  //         fileApi.getAll(currentUserId), 
+  //         recentApi.getAll(),
+  //       ]);
+        
+  //       setFolders(folderRes.data);
+  //       setFiles(fileRes.data);
+        
+  //       // Lọc Recent Files (Chỉ lấy file upload và thuộc về user này)
+  //       if (recentRes.data) {
+  //           const myRecentFiles = recentRes.data.filter(
+  //               (f) => f.path?.startsWith("/uploads") && f.owner === currentUserId
+  //           );
+  //           setRecentFiles(myRecentFiles);
+  //       }
+
+  //     } catch (err) {
+  //       console.error("Lỗi tải dữ liệu", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   loadData();
+  // }, [currentUserId]); // Chạy lại khi ID thay đổi
   useEffect(() => {
-    async function loadData() {
-      try {
-        if (!currentUserId) {
-            // Nếu chưa đăng nhập (hoặc mất ID), không tải dữ liệu để bảo mật
-            setLoading(false);
-            return;
-        }
-
-        const [folderRes, fileRes, recentRes] = await Promise.all([
-          folderApi.getAll(),
-          // QUAN TRỌNG: Truyền userId vào để chỉ lấy file của mình
-          fileApi.getAll(currentUserId), 
-          recentApi.getAll(),
-        ]);
-        
-        setFolders(folderRes.data);
-        setFiles(fileRes.data);
-        
-        // Lọc Recent Files (Chỉ lấy file upload và thuộc về user này)
-        if (recentRes.data) {
-            const myRecentFiles = recentRes.data.filter(
-                (f) => f.path?.startsWith("/uploads") && f.owner === currentUserId
-            );
-            setRecentFiles(myRecentFiles);
-        }
-
-      } catch (err) {
-        console.error("Lỗi tải dữ liệu", err);
-      } finally {
-        setLoading(false);
-      }
+  const mockFiles = [
+    {
+      _id: "product-001",
+      name: "TEST RENDER PRODUCT",
+      fileType: "document",
+      size: 102400,
+      folder: null,
+      owner: {
+        name: "Render Test"
+      },
+      createdAt: "2026-09-27",
+      isPublic: true,
+      url: "#"
+    },
+    {
+      _id: "product-002",
+      name: "Sản phẩm CI-CD mới",
+      fileType: "document",
+      size: 204800,
+      folder: null,
+      owner: {
+        name: "Render Test"
+      },
+      createdAt: "2026-09-27",
+      isPublic: true,
+      url: "#"
+    },
+    {
+      _id: "product-003",
+      name: "Demo sản phẩm Render",
+      fileType: "image",
+      size: 512000,
+      folder: null,
+      owner: {
+        name: "Render Test"
+      },
+      createdAt: "2026-09-27",
+      isPublic: true,
+      url: "#"
     }
-    loadData();
-  }, [currentUserId]); // Chạy lại khi ID thay đổi
+  ];
+
+  setFolders([]);
+  setFiles(mockFiles);
+  setRecentFiles([]);
+  setLoading(false);
+}, []);
 
   // =========================================================
   // 2. CÁC HÀM XỬ LÝ (ACTIONS)
