@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Backend Dependencies') {
+            steps {
+                sh '''
+                    docker run --rm \
+                    -v "$PWD/backend:/app" \
+                    -w /app \
+                    node:18-alpine \
+                    npm ci
+                '''
+            }
+        }
+
+        stage('Test Backend') {
+            steps {
+                sh '''
+                    docker run --rm \
+                    -v "$PWD/backend:/app" \
+                    -w /app \
+                    node:18-alpine \
+                    npm test
+                '''
+            }
+        }
+
+        stage('Docker Build Backend') {
+            steps {
+                sh '''
+                    docker build \
+                    -t nodejs2api-backend:latest \
+                    ./backend
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Backend CI SUCCESS!'
+        }
+
+        failure {
+            echo 'Backend CI FAILED!'
+        }
+    }
+}

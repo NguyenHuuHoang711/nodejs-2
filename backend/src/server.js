@@ -11,7 +11,7 @@ const RecentlyOpenedRoutes = require("./routes/RecentlyOpened")
 const app = express();
 app.set('trust proxy', 1);
 
-const host = process.env.HOST || 'localhost';
+const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 3000;
 const API_VERSION = process.env.API_VERSION || 'v1';
 
@@ -57,7 +57,11 @@ app.use(`/api/${API_VERSION}/folders/:id/files`, async (req,res) => {
 app.use('/api/files', fileRoutes);
 app.use('/api/folders', folderRoutes);
 
-
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    message: 'Backend is running'
+  });
 // Error handling middleware
 app.use(errorHandler);
 
