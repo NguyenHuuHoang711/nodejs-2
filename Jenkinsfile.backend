@@ -9,14 +9,12 @@ pipeline {
             }
         }
 
-        stage('Install Backend Dependencies') {
+        stage('Docker Build Backend') {
             steps {
                 sh '''
-                    docker run --rm \
-                    -v "$PWD/backend:/app" \
-                    -w /app \
-                    node:18-alpine \
-                    npm ci
+                    docker build \
+                    -t nodejs2api-backend:latest \
+                    ./backend
                 '''
             }
         }
@@ -25,20 +23,8 @@ pipeline {
             steps {
                 sh '''
                     docker run --rm \
-                    -v "$PWD/backend:/app" \
-                    -w /app \
-                    node:18-alpine \
+                    nodejs2api-backend:latest \
                     npm test
-                '''
-            }
-        }
-
-        stage('Docker Build Backend') {
-            steps {
-                sh '''
-                    docker build \
-                    -t nodejs2api-backend:latest \
-                    ./backend
                 '''
             }
         }
