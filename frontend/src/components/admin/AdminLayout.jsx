@@ -61,13 +61,15 @@ const AdminLayout = () => {
                 .custom-scroll::-webkit-scrollbar-thumb:hover {
                     background: #a8a8a8; 
                 }
+                
             `}</style>
 
             {/* ---------------- SIDEBAR ---------------- */}
             {/* Áp dụng style từ biến styles.sidebarContainer */}
             <aside 
                 className="w-64 text-white flex flex-col shadow-lg transition-all duration-300"
-                style={styles.sidebarContainer} 
+                style={{ backgroundColor: "red" }}
+
             >
                 {/* Logo Area */}
                 <div className="h-16 flex items-center justify-center border-b border-gray-700">

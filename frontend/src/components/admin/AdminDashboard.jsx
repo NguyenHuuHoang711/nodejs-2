@@ -101,9 +101,9 @@ const AdminDashboard = () => {
     </h1>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-lg shadow flex items-center">
-                    <div className="p-3 bg-blue-100 rounded-full text-blue-600 mr-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" style={{ backgroundColor: "red" }}>
+                <div className="bg-white p-6 rounded-lg shadow flex items-center" style={{ backgroundColor: "red" }}>
+                    <div className="p-3 bg-blue-100 rounded-full text-blue-600 mr-4" style={{ backgroundColor: "red" }}>
                         <Users size={24} />
                     </div>
                     <div>
