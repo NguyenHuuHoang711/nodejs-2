@@ -92,7 +92,7 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="p-6 bg-gray-100 min-h-screen" style={{ background: "red" }}>
             <h1 className="text-2xl font-bold mb-6 text-gray-800">Dashboard Hệ Thống</h1>
 
             {/* Stats Cards */}
