@@ -111,13 +111,7 @@ const AdminLayout = () => {
             </aside>
 
             {/* ---------------- MAIN CONTENT WRAPPER ---------------- */}
-            <div className="flex-1 flex flex-col min-w-0">
-                {/* Main Content (Dynamic) */}
-                {/* Thêm class 'custom-scroll' để thanh cuộn đẹp hơn */}
-                <main className="flex-1 overflow-y-auto p-6 scroll-smooth custom-scroll">
-                    <Outlet />
-                </main>
-            </div>
+            <div className="flex-1 flex flex-col min-w-0"> <main className="flex-1 overflow-y-auto p-6 scroll-smooth custom-scroll" style={{ backgroundColor: "red" }} > <Outlet /> </main> </div>
         </div>
     );
 };
