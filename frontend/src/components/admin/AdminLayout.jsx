@@ -40,7 +40,10 @@ const AdminLayout = () => {
     };
 
     return (
-        <div className="flex h-screen bg-gray-100 overflow-hidden">
+        <div
+    className="flex h-screen overflow-hidden"
+    style={{ backgroundColor: "red" }}
+>
             {/* --- CÁCH 2: Dùng thẻ <style> trực tiếp --- */}
             {/* Cách này giúp bạn custom thanh cuộn (Scrollbar) mà inline style không làm được */}
             <style>{`
